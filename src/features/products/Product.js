@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { fetchAsyncProducts,selectProduct} from './productsSlice';
+import { fetchAsyncProducts,selectProduct,fetchAsyncProductsCategory} from './productsSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon,ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
- 
+import { Link } from 'react-router-dom';
 
 
 const sortOptions = [
@@ -33,25 +33,14 @@ const filters = [
     id: 'category',
     name: 'Category',
     options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
+      { value: 'mens clothing', label: 'Mens-Clothing', checked: false },
+      { value: 'womens clothing', label: 'Womens', checked: false },
+      { value: 'jewelery', label: 'jewelery', checked: false },
+      { value: 'electronics', label: 'electronics', checked: false },
+       
     ],
   },
-  {
-    id: 'size',
-    name: 'Size',
-    options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
-    ],
-  },
+   
 ]
 
 function classNames(...classes) {
@@ -68,6 +57,14 @@ const Product = () => {
      dispatch(fetchAsyncProducts());
   }, [dispatch]);
 
+  const handleFilter=(e,section,option)=>{
+      if(e.target.checked){
+        dispatch(fetchAsyncProductsCategory(option.value))
+      }else{
+        return;
+      }
+   
+  }
   
  
   return (
@@ -145,6 +142,7 @@ const Product = () => {
                                       type="checkbox"
                                       defaultChecked={option.checked}
                                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                      onChange={(e)=>handleFilter(e,section,option)}
                                     />
                                     <label
                                       htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
@@ -197,7 +195,7 @@ const Product = () => {
                       {sortOptions.map((option) => (
                         <Menu.Item key={option.name}>
                           {({ active }) => (
-                            <a
+                            <Link
                               href={option.href}
                               className={classNames(
                                 option.current ? 'font-medium text-gray-900' : 'text-gray-500',
@@ -206,7 +204,7 @@ const Product = () => {
                               )}
                             >
                               {option.name}
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                       ))}
@@ -267,6 +265,7 @@ const Product = () => {
                                   type="checkbox"
                                   defaultChecked={option.checked}
                                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                  onChange={(e)=>handleFilter(e,section,option)}
                                 />
                                 <label
                                   htmlFor={`filter-${section.id}-${optionIdx}`}
@@ -303,10 +302,10 @@ const Product = () => {
               <div className="mt-8">
                 <div>
                   <h3 className="text-sm h-10 text-gray-700">
-                    <a href={prod.href}>
+                    <Link href={prod.href}>
                       <span aria-hidden="true" className="absolute inset-0" />
                       {prod.title}
-                    </a>
+                    </Link>
                   </h3>
                   <p className="mt-1 text-sm text-gray-500">{prod.color}</p>
                 </div>
@@ -330,18 +329,18 @@ const Product = () => {
         {/* pagination */}
         <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
       <div className="flex flex-1 justify-between sm:hidden">
-        <a
+        <Link
           href="#"
           className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
           Previous
-        </a>
-        <a
+        </Link>
+        <Link
           href="#"
           className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
         >
           Next
-        </a>
+        </Link>
       </div>
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
@@ -352,44 +351,44 @@ const Product = () => {
         </div>
         <div>
           <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
-            <a
+            <Link
               href="#"
               className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
             >
               <span className="sr-only">Previous</span>
               <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-            </a>
+            </Link>
             {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
-            <a
+            <Link
               href="#"
               aria-current="page"
               className="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               1
-            </a>
-            <a
+            </Link>
+            <Link
               href="#"
               className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
             >
               2
-            </a>
-            <a
+            </Link>
+            <Link
               href="#"
               className="relative hidden items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 md:inline-flex"
             >
               3
-            </a>
+            </Link>
             <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">
               4
             </span>
             
-            <a
+            <Link
               href="#"
               className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
             >
               <span className="sr-only">Next</span>
               <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-            </a>
+            </Link>
           </nav>
         </div>
       </div>
