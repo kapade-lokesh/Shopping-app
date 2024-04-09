@@ -5,7 +5,7 @@ import SiginPage from '../pages/SiginPage'
 import { LoginPage } from '../pages/LoginPage'
 import CartPage from '../pages/CartPage'
 import CheckOutPage from '../pages/CheckOutPage'
-
+import ProductDetailPage from '../pages/ProductDetailPage'
 const Routing = () => {
   return (
     <div>
@@ -17,6 +17,7 @@ const Routing = () => {
                 <Route path='/signin' element={<SiginPage/>}/>
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/checkout' element={<CheckOutPage/>}/>
+                <Route path='/productdetail' element={<ProductDetailPage/>}/>
            </Routes>
       </Router>
 
