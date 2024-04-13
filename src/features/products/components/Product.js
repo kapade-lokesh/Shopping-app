@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { fetchAsyncProducts,selectProduct,fetchAsyncProductsCategory} from './productsSlice';
+import { fetchAsyncProducts,selectProduct,fetchAsyncProductsCategory} from '../productsSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon,ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon,ChevronLeftIcon, ChevronRightIcon,StarIcon } from '@heroicons/react/20/solid'
 import { Link } from 'react-router-dom';
 
 
@@ -50,6 +50,7 @@ function classNames(...classes) {
 const Product = () => {
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [page, setPage] = useState(1);
   const dispatch = useDispatch();
 
 
@@ -274,18 +275,18 @@ const ProductGrid=()=>{
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-4 lg:max-w-7xl lg:px-0">
        
           
-        <div className=" grid grid-cols-1 bg-gray-200 p-8 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3  xl:gap-x-8">
+        <div className=" grid grid-cols-1  p-8 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
           {product.map((prod) => (
         <Link to='/productdetail'>
-            <div key={prod.id} className="group relative border-2 border-gray-300 ">
+            <div key={prod.id} className="group relative border-2 p-3 border-gray-300 bg-gray-300">
               <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                 <img
-                  src={prod.image}
-                  alt={prod.imageAlt}
+                  src={prod.thumbnail}
+                  alt={prod.title}
                   className="h-full w-full object-cover object-center lg:h-full lg:w-full "
                 />
               </div>
-              <div className="mt-8">
+              <div className="mt-8 flex justify-between">
                 <div>
                   <h3 className="text-sm h-10 text-gray-700">
                     <div> 
@@ -293,13 +294,19 @@ const ProductGrid=()=>{
                       {prod.title}
                     </div>
                   </h3>
-                  <p className="mt-1 text-sm text-gray-500">{prod.color}</p>
+                  <p className="mt-1 text-sm text-gray-500">
+                     <StarIcon className='h-6 w-6 inline-block mb-2'/>
+                     <span className='inline-block m-3'> {prod.rating}</span>
+                     </p>
                 </div>
-                <div className='flex justify-between mt-4'>
-                   <div className='w-50'>
-                     
+                <div className=' justify-between mt-4'>
+                   <div className='mt-2 w-50'>
+                   <p className="text-sm font-medium w-50 mx-3  text-gray-800"> &#8377; {Math.round(prod.price-(prod.price*(prod.discountPercentage/100)))}</p>
                    </div>
-                <p className="text-lg font-medium w-50 mx-3  text-gray-900"> &#8377; {prod.price.toString()}</p>
+                 
+                   <div className='mt-2 w-50'>
+                   <p className="text-sm font-medium w-50 mx-3  text-gray-500 line-through"> &#8377; {prod.price}</p>
+                   </div>
                 </div>
               </div>
             </div>
@@ -312,7 +319,7 @@ const ProductGrid=()=>{
   )
 }
 
-const Pagination = ()=>{
+const Pagination = ({page,setPage})=>{
   return(
     <div>
         <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
