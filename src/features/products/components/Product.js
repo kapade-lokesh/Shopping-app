@@ -26,6 +26,24 @@ const filters = [
       { value: 'skincare', label: 'skincare', checked: false },
       { value: 'groceries', label: 'groceries', checked: false },
       { value: 'home-decoration', label: 'homedecoration', checked: false },
+      { value: 'furniture', label: 'furniture', checked: false },
+      { value: 'tops', label: 'tops', checked: false },
+      { value: 'womens-dresses', label: 'womensdresses', checked: false },
+      { value: 'womens-shoes', label: 'womensshoes', checked: false },
+      { value: 'mens-shirts', label: 'mensshirts', checked: false },
+      { value: 'mens-shoes', label: 'mensshoes', checked: false },
+      { value: 'mens-watches', label: 'menswatches', checked: false },
+      { value: 'womens-watches', label: 'womenswatches', checked: false },
+      { value: 'womens-bags', label: 'womensbags', checked: false },
+      {
+        value: 'womens-jewellery',
+        label: 'womensjewellery',
+        checked: false
+      },
+      { value: 'sunglasses', label: 'sunglasses', checked: false },
+      { value: 'automotive', label: 'automotive', checked: false },
+      { value: 'motorcycle', label: 'motorcycle', checked: false },
+      { value: 'lighting', label: 'lighting', checked: false }
     ],
   },
 
@@ -212,23 +230,35 @@ const Product = () => {
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const [filter,setfilter] = useState({}); 
-
+  const [sort,setSort] = useState({})
   useEffect( () => {
+     
      dispatch(fetchAsyncProducts());
   }, [dispatch]);
 
+ 
+  useEffect(()=>{
+    dispatch(fetchAsyncProductsCategory({filter,sort}))
+  },[dispatch,filter,sort])
+   
   const handleFilter=(e,section,option)=>{
-    const filtervalues = {...filter,[section.id]:option.value}
+    const filtervalues = {...filter}
+    if(e.target.checked){
+      if( filtervalues[section.id]){
+      filtervalues[section.id].push(option.value)
+      }else{
+        filtervalues[section.id] = [option.value]
+      }
+    }else{
+      const index =  filtervalues[section.id].findIndex(ele=>ele===option.value)
+      filtervalues[section.id].splice(index,1)
+    }
     setfilter(filtervalues);
-    dispatch(fetchAsyncProductsCategory(filtervalues))
-    console.log(filter)
   }
   
   const handleSort =(e,option)=>{
-    console.log(e,option)
-    const filtervalues = {...filter,_sort:option.sort}
-    setfilter(filtervalues);
-    dispatch(fetchAsyncProductsCategory(filtervalues))
+    const sortvalues = {_sort:option.sort}
+    setSort(sortvalues); 
   }
  
   return (

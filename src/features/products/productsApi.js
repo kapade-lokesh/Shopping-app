@@ -16,15 +16,28 @@ export const fetchProducts = async () =>{
 }
 
 
-export const fetchProductsByCategory= async (filter)=>{
+export const fetchProductsByCategory= async (filter,sort)=>{
+
+     // filter = {category:['smartphone','laptops']}
+     //sort = {_sort:'price'}
+     
      try{
        
          var queryString = '';
 
         for(var key in filter){
-            queryString +=`${key}=${filter[key]}&`
+            let categories = filter[key];
+            if(categories.length>0){
+                let lastcategory = categories[categories.length-1]
+                queryString +=`${key}=${lastcategory}&`
+            }
+          
         }
         console.log(queryString)
+
+        for(var key in sort){
+            queryString +=`${key}=${sort[key]}&`
+        }
 
         const response = await fetch(`http://localhost:8080/products?${queryString}`)
        
