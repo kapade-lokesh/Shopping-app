@@ -15,8 +15,8 @@ export const fetchAsyncProducts = createAsyncThunk(
 
 
 export const fetchAsyncProductsCategory = createAsyncThunk(
-     'product/fetchAsyncProductsCategory' , async(value)=>{
-           const data = await fetchProductsByCategory(value)
+     'product/fetchAsyncProductsCategory' , async(filter)=>{
+           const data = await fetchProductsByCategory(filter)
            return data;
      }
 )

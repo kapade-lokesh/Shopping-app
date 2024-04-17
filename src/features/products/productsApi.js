@@ -10,25 +10,29 @@ export const fetchProducts = async () =>{
 
        return data;
 
-       
-
     }catch(err){
         console.log(err);
     }
 }
 
 
-export const fetchProductsByCategory= async (value)=>{
+export const fetchProductsByCategory= async (filter)=>{
      try{
-      
-        const response = await fetch(`https://fakestoreapi.com/products/category/${value}`)
+       
+         var queryString = '';
+
+        for(var key in filter){
+            queryString +=`${key}=${filter[key]}&`
+        }
+        console.log(queryString)
+
+        const response = await fetch(`http://localhost:8080/products?${queryString}`)
        
         if(!response.ok)
             throw new Error('error while fetching')
 
             const data = await response.json()
- 
-             console.log(data)
+  
 
             return data;
         
