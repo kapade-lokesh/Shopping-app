@@ -1,46 +1,51 @@
-export const fetchProducts = async () =>{
-    try{
+// export const fetchProducts = async () =>{
+//     try{
      
-     const response = await fetch('http://localhost:8080/products')
+//      const response = await fetch('http://localhost:8080/products')
 
-     if(!response.ok)
-       throw new Error('error while fetching')
+//      if(!response.ok)
+//        throw new Error('error while fetching')
     
-       const data = await response.json()
+//        const data = await response.json()
 
-       return data;
+//        return data;
 
-    }catch(err){
-        console.log(err);
-    }
-}
+//     }catch(err){
+//         console.log(err);
+//     }\
+// }
 
 
-export const fetchProductsByCategory= async (filter,sort)=>{
+export const fetchProductsByCategory= async (filter,sort,Pagination)=>{
 
      // filter = {category:['smartphone','laptops']}
      //sort = {_sort:'price'}
      
      try{
        
-         var queryString = '';
+         let queryString='';
 
         for(var key in filter){
             let categories = filter[key];
             if(categories.length>0){
                 let lastcategory = categories[categories.length-1]
-                queryString +=`${key}=${lastcategory}&`
+                queryString +=`${key?`${key}=${lastcategory}&`:`${queryString}`}`
             }
           
         }
-        console.log(queryString)
-
+        
         for(var key in sort){
             queryString +=`${key}=${sort[key]}&`
         }
+        
+        for(var key in Pagination){
+            queryString +=`${key}=${Pagination[key]}&`
+        }
+   
+        console.log(queryString)
 
         const response = await fetch(`http://localhost:8080/products?${queryString}`)
-       
+    
         if(!response.ok)
             throw new Error('error while fetching')
 
