@@ -45,13 +45,12 @@ export const fetchProductsByCategory= async (filter,sort,Pagination)=>{
         console.log(queryString)
 
         const response = await fetch(`http://localhost:8080/products?${queryString}`)
-    
+         console.log(response)
         if(!response.ok)
             throw new Error('error while fetching')
 
             const data = await response.json()
-  
-
+             
             return data;
         
      }catch(err){
